@@ -1,0 +1,83 @@
+.body,html{
+    background-color: #bfbbbb;
+   
+}
+
+/*the switch */
+.switch {
+    position: relative;
+    display: inline-flex;
+    width: 15.5vw;
+    height: 15.5vh;
+    float:right;
+    margin-right:2vw ;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    /* -webkit-transition: .4s;
+    transition: .4s; */
+  }
+  /*the slider*/
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 12vh;
+    width:6.1vw;
+    left: 0.8vw;
+    bottom: 2vh;
+    background-color: white;
+    /* -webkit-transition: .4s;
+    transition: .4s; */
+  }
+  input:checked + .slider {
+    background-color: #df1b1b;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #df1b1b;
+  }
+
+  /* create movment */
+  input:checked + .slider:before {
+      /*adjustment for few browsers*/
+     -webkit-transform: translateX(7.5vw);
+    -ms-transform: translateX(7.5vw); 
+    transform: translateX(7.5vw);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .popupContainer{
+      width: 96vw;
+      height: 42vw;
+      
+  }
+  .checkboxTitle{
+    font-size:5vw;
+    color: black;
+    font-weight: 700;
+  }
+  .switchWarpper
+  {
+      display: flex;
+  }
