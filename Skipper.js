@@ -1,70 +1,50 @@
-if (typeof window !== 'undefined') {
-    console.log('You are on the browser');
+var checkState;
 
+(() => {
+    chrome.storage.sync.get(['isSkipChecked'], (result) => checkState = result.isSkipChecked); // check if skip enable in local storage
 
-    window.onload = () => {
-        waitForElm('[data-uia="player-skip-intro"]').then((elm) => {
-            debugger;
-            elm.click();
-            console.log('Element is ready');
-            console.log(elm.textContent);
-        });
-        var MutationObserver = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-                if (mutation.target && mutation.target.innerText && mutation.target.innerText.indexOf('Skip intro') != -1) {
-                    mutation.target.click();
-                    console.log('Clicked');
-                }
-            });
-        });
-
-        MutationObserver.observe(document.body, { attributes: true, subtree: true, childList: true, CharacterData: true });
-    };
-
-    window.addEventListener('DOMContentLoaded', (event) => {
-        waitForElm('[data-uia="player-skip-intro"]').then((elm) => {
-            debugger;
-            elm.click();
-            console.log('Element is ready');
-            console.log(elm.textContent);
-        });
-        var MutationObserver = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-                if (mutation.target && mutation.target.innerText && mutation.target.innerText.indexOf('Skip intro') != -1) {
-                    mutation.target.click();
-                    console.log('Clicked');
-                }
-            });
-        });
-
-        MutationObserver.observe(document.body, { attributes: true, subtree: true, childList: true, CharacterData: true });
-    });
-}
-
-
-function waitForElm (selector) {
-
-    return new Promise(resolve => {
-        if (document.querySelector(selector)) {
-            return resolve(document.querySelector(selector));
+    window.addEventListener('load', () => {
+        if (checkState) {
+            bodyObserver.observe(document.body, observerOptions); //gets all the html elements 
         }
+    });
 
-        const observer = new MutationObserver(mutations => {
-            if (document.querySelector(selector)) {
-                resolve(document.querySelector(selector));
-                observer.disconnect();
+})();
+const observerOptions = {
+    subtree: true,
+    childList: true
+};
+
+// running on the elements and searching element with  data-uia="player-skip-intro" (its the skip button) and click it
+const bodyObserver = new MutationObserver(mutations => {
+
+    mutations.forEach(mutation => {
+
+        mutation.addedNodes.forEach(node => {
+            if (node instanceof HTMLElement) {
+                const skipButton = node.querySelector('button[data-uia="player-skip-intro"]');
+                if (skipButton) {
+
+                    // small delay just for visuals
+                    setTimeout(function () {
+                        try {
+                            debugger;
+                            skipButton.click();
+                            chrome.storage.sync.get(['isSkipChecked'], (result) => {
+                                console.log(result.isSkipChecked);
+                                checkState = result.isSkipChecked;
+                            });
+                        } catch (error) {
+
+                        }
+                    }, 300);
+                    try {
+                        skipButton.querySelector('span').innerHTML = "Skipping...";
+                    } catch (error) {
+
+                    }
+                }
             }
         });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
     });
-}
-
-
-// waitForElm('[data-uia="player-skip-intro"]').then((elm) => {
-//     console.log('Element is ready');
-//     console.log(elm.textContent);
-// });
+});

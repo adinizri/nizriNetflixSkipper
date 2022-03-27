@@ -7,6 +7,9 @@
         "storage",
         "scripting"
     ],
+    "host_permissions": [
+        "https://www.netflix.com/*"
+    ],
     "action": {
         "default_popup": "popup.html",
         "default_icon": {
@@ -29,7 +32,8 @@
             ],
             "js": [
                 "Skipper.js"
-            ]
+            ],
+            "run_at": "document_start"
         }
     ]
 }
